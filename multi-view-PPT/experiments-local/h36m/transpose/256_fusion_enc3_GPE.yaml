@@ -1,0 +1,110 @@
+GPUS: '0,1,2,3'
+MODEL: multiview_transpose
+DATA_DIR: ''
+OUTPUT_DIR: 'output'
+LOG_DIR: 'log'
+WORKERS: 16
+PRINT_FREQ: 100
+
+DATASET:
+  TRAIN_DATASET: multiview_h36m
+  TEST_DATASET: multiview_h36m
+  ROOT: '/media/hdd10tb/haoyum/human36m/'
+  TRAIN_SUBSET: train
+  TEST_SUBSET: validation
+  DATA_FORMAT: 'jpg'
+  ROT_FACTOR: 0
+  SCALE_FACTOR: 0
+  WITH_DAMAGE: false
+
+NETWORK:
+  INIT_WEIGHTS: true
+  NAME: pose_tokenpose_s
+  NUM_JOINTS: 17
+  PRETRAINED: 'models/model_best.pth'
+  TARGET_TYPE: gaussian
+  TRANSFORMER_DEPTH: 12
+  TRANSFORMER_HEADS: 8
+  TRANSFORMER_MLP_RATIO: 3
+  POS_EMBEDDING_TYPE: 'sine-full'
+  INIT: true
+  DIM: 192 # 4*4*3
+  PATCH_SIZE:
+  - 4
+  - 4
+  IMAGE_SIZE:
+  - 256
+  - 256
+  HEATMAP_SIZE:
+  - 64
+  - 64
+  SIGMA: 2
+
+# NETWORK:
+#   PRETRAINED: 'models/pytorch/coco/tp_r_256x192_enc3_d256_h1024_mh8.pth'
+#   TARGET_TYPE: gaussian
+#   FUSION: true
+#   POS_EMB_3D: geometry
+#   GAMMA: 10
+#   DIM_MODEL: 256
+#   DIM_FEEDFORWARD: 1024
+#   ENCODER_LAYERS: 3
+#   N_HEAD: 8
+#   POS_EMBEDDING: 'sine'
+#   ATTENTION_ACTIVATION: 'relu'
+
+#   HEATMAP_SIZE:
+#   - 64
+#   - 64
+#   IMAGE_SIZE:
+#   - 256
+#   - 256
+#   NUM_JOINTS: 20
+#   SIGMA: 2
+#   EXTRA:
+#     NUM_LAYERS: 50
+#     DECONV_WITH_BIAS: false
+#     FINAL_CONV_KERNEL: 1
+
+LOSS:
+  USE_TARGET_WEIGHT: true
+TRAIN:
+  BATCH_SIZE: 8
+  SHUFFLE: true
+  BEGIN_EPOCH: 0
+  END_EPOCH: 20
+  RESUME: true
+  OPTIMIZER: adam
+  LR: 0.001
+  LR_FACTOR: 0.1
+  LR_STEP:
+  - 10
+  - 15
+  WD: 0.0001
+  GAMMA1: 0.99
+  GAMMA2: 0.0
+  MOMENTUM: 0.9
+  NESTEROV: false
+TEST:
+  BATCH_SIZE: 8
+  BBOX_FILE: ''
+  BBOX_THRE: 1.0
+  DETECTOR: fpn_dcn
+  DETECTOR_DIR: ''
+  IMAGE_THRE: 0.1
+  IN_VIS_THRE: 0.0
+  MATCH_IOU_THRE: 0.3
+  MODEL_FILE: ''
+  NMS_THRE: 0.6
+  OKS_THRE: 0.5
+  POST_PROCESS: true
+  USE_GT_BBOX: true
+PICT_STRUCT:
+  PAIRWISE_FILE: 'data/pict/pairwise.pkl'
+DEBUG:
+  DEBUG: true
+  SAVE_BATCH_IMAGES_GT: true
+  SAVE_BATCH_IMAGES_PRED: true
+  SAVE_HEATMAPS_GT: true
+  SAVE_HEATMAPS_PRED: true
+

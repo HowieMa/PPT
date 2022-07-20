@@ -1,0 +1,14 @@
+torchvision==0.8.2
+torch==1.7.1
+EasyDict==1.7
+opencv_python==4.5.2.52
+shapely==1.6.4
+Cython
+scipy
+pandas
+pyyaml
+h5py
+json_tricks
+scikit-image
+tensorboardX==2.4.1
+pymvg==2.0.0
