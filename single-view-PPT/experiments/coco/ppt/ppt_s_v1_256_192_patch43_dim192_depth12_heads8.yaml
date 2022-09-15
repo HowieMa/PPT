@@ -1,4 +1,3 @@
-# 5.65 gflops
 AUTO_RESUME: true
 CUDNN:
   BENCHMARK: true
@@ -24,10 +23,12 @@ DATASET:
   TEST_SET: 'val2017'
   TRAIN_SET: 'train2017'
 MODEL:
+  PRUNING: true  # PPT only
+  PRUNING_RATIO: 0.7  # PPT only
   INIT_WEIGHTS: true
-  NAME: pose_tokenpose_b
+  NAME: pose_tokenpose_s
   NUM_JOINTS: 17
-  PRETRAINED: 'models/pytorch/imagenet/hrnet_w32-36af842e.pth'
+  PRETRAINED: ''
   TARGET_TYPE: gaussian
   TRANSFORMER_DEPTH: 12
   TRANSFORMER_HEADS: 8
@@ -56,6 +57,8 @@ MODEL:
     - 'stage2'
     - 'transition2'
     - 'stage3'
+    - 'transition3'
+    - 'stage4'
     FINAL_CONV_KERNEL: 1
     STAGE2:
       NUM_MODULES: 1
@@ -81,6 +84,21 @@ MODEL:
       - 64
       - 128
       FUSE_METHOD: SUM
+    STAGE4:
+      NUM_MODULES: 3
+      NUM_BRANCHES: 4
+      BLOCK: BASIC
+      NUM_BLOCKS:
+      - 4
+      - 4
+      - 4
+      - 4
+      NUM_CHANNELS:
+      - 32
+      - 64
+      - 128
+      - 256
+      FUSE_METHOD: SUM
 LOSS:
   USE_TARGET_WEIGHT: true
 TRAIN:
@@ -105,7 +123,7 @@ TEST:
   BBOX_THRE: 1.0
   IMAGE_THRE: 0.0
   IN_VIS_THRE: 0.2
-  MODEL_FILE: '/data/pretrained/pose/tokenpose/tokenpose_b_d12_h8_d192_74_6.pth'
+  MODEL_FILE: ''
   NMS_THRE: 1.0
   OKS_THRE: 0.9
   USE_GT_BBOX: true

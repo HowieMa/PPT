@@ -1,4 +1,3 @@
-# 5.65 gflops
 AUTO_RESUME: true
 CUDNN:
   BENCHMARK: true
@@ -24,12 +23,16 @@ DATASET:
   TEST_SET: 'val2017'
   TRAIN_SET: 'train2017'
 MODEL:
+  PRUNING: true  # PPT only
+  PRUNING_RATIO: 0.7  # PPT only
   INIT_WEIGHTS: true
-  NAME: pose_tokenpose_b
+  NAME: pose_tokenpose_b  # !!! Difference between Tokenpose-B and tokenpose-L/D6 is the CNN backbone
   NUM_JOINTS: 17
-  PRETRAINED: 'models/pytorch/imagenet/hrnet_w32-36af842e.pth'
+  PRETRAINED: 'models/pytorch/imagenet/hrnet_w48-8ef0771d.pth'
   TARGET_TYPE: gaussian
-  TRANSFORMER_DEPTH: 12
+  BASE_CHANNEL: 48
+  HIDDEN_HEATMAP_DIM: 384
+  TRANSFORMER_DEPTH: 6 # !!!
   TRANSFORMER_HEADS: 8
   TRANSFORMER_MLP_RATIO: 3
   POS_EMBEDDING_TYPE: 'sine-full'
@@ -65,8 +68,8 @@ MODEL:
       - 4
       - 4
       NUM_CHANNELS:
-      - 32
-      - 64
+      - 48
+      - 96
       FUSE_METHOD: SUM
     STAGE3:
       NUM_MODULES: 4
@@ -77,9 +80,9 @@ MODEL:
       - 4
       - 4
       NUM_CHANNELS:
-      - 32
-      - 64
-      - 128
+      - 48
+      - 96
+      - 192
       FUSE_METHOD: SUM
 LOSS:
   USE_TARGET_WEIGHT: true
@@ -105,7 +108,7 @@ TEST:
   BBOX_THRE: 1.0
   IMAGE_THRE: 0.0
   IN_VIS_THRE: 0.2
-  MODEL_FILE: '/data/pretrained/pose/tokenpose/tokenpose_b_d12_h8_d192_74_6.pth'
+  MODEL_FILE: ''
   NMS_THRE: 1.0
   OKS_THRE: 0.9
   USE_GT_BBOX: true

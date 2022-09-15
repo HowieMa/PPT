@@ -3,6 +3,7 @@
 # Licensed under the MIT License.
 # Written by Bin Xiao (Bin.Xiao@microsoft.com)
 # Modified by Yanjie Li (leeyegy@gmail.com)
+# Modified by Haoyu Ma (haoyum3@uci.edu)
 # ------------------------------------------------------------------------------
 
 from __future__ import absolute_import
@@ -43,8 +44,13 @@ class TokenPose_S(nn.Module):
                                  pos_embedding_type=cfg.MODEL.POS_EMBEDDING_TYPE)
         ###################################################3
 
-    def forward(self, x, ratio=0.7):
+        self.ratio = cfg.MODEL.PRUNING_RATIO  # 
+
+    def forward(self, x, ratio=None):
         # x: (B, 3, Hi, Wi)
+        if ratio is None:
+            ratio = self.ratio
+        
         x = self.features(x, ratio=ratio)
         return x
 

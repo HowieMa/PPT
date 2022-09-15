@@ -3,6 +3,7 @@
 # Licensed under the MIT License.
 # Written by Bin Xiao (Bin.Xiao@microsoft.com)
 # Modified by Yanjie Li (leeyegy@gmail.com)
+# Modified by Haoyu Ma (haoyum3@uci.edu)
 # ------------------------------------------------------------------------------
 
 from __future__ import absolute_import
@@ -42,9 +43,26 @@ _C.MODEL.TAG_PER_JOINT = True
 _C.MODEL.TARGET_TYPE = 'gaussian'
 _C.MODEL.IMAGE_SIZE = [256, 256]  # width * height, ex: 192 * 256
 _C.MODEL.HEATMAP_SIZE = [64, 64]  # width * height, ex: 24 * 32
-_C.MODEL.PATCH_SIZE = [64, 64]
 _C.MODEL.SIGMA = 2
+_C.MODEL.EXTRA = CN(new_allowed=True)
+
+# add by TransPose >>>>>>>>>>>>>>>>>>>>>>>>>>
+_C.MODEL.BOTTLENECK_NUM = 0
+_C.MODEL.DIM_MODEL = 256
+_C.MODEL.DIM_FEEDFORWARD = 512
+_C.MODEL.ENCODER_LAYERS = 6
+_C.MODEL.N_HEAD = 8
+_C.MODEL.ATTENTION_ACTIVATION = 'relu'
+_C.MODEL.POS_EMBEDDING = 'learnable'
+_C.MODEL.INTERMEDIATE_SUP = False
+_C.MODEL.PE_ONLY_AT_BEGIN = False
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+# add by TokenPose >>>>>>>>>>>>>>>>>>>>>>>>
+_C.MODEL.PATCH_SIZE = [64, 64]
 _C.MODEL.HIDDEN_HEATMAP_DIM = -1
+
 _C.MODEL.TRANSFORMER_DEPTH = 2
 _C.MODEL.TRANSFORMER_HEADS = 2
 _C.MODEL.TRANSFORMER_MLP_RATIO = 2
@@ -56,7 +74,12 @@ _C.MODEL.MULTI_DIM = [48, 48]
 _C.MODEL.INIT = False
 _C.MODEL.NUM_BRANCHES = 1
 _C.MODEL.BASE_CHANNEL = 32
-_C.MODEL.EXTRA = CN(new_allowed=True)
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+# add by PPT >>>>>>>>>>>>>>>>>>>>>>>>>>>
+_C.MODEL.PRUNING = False
+_C.MODEL.PRUNING_RATIO = 1.0
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 _C.LOSS = CN()
 _C.LOSS.USE_OHKM = False
@@ -88,8 +111,11 @@ _C.TRAIN = CN()
 _C.TRAIN.LR_FACTOR = 0.1
 _C.TRAIN.LR_STEP = [90, 110]
 _C.TRAIN.LR = 0.001
+
+# add by TokenPose >>>>>>>>>>>>>>>>>>>>
 _C.TRAIN.LR_SCHEDULER = 'MultiStepLR'
 _C.TRAIN.LR_END = 0.00001
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 _C.TRAIN.OPTIMIZER = 'adam'
 _C.TRAIN.MOMENTUM = 0.9
@@ -116,6 +142,7 @@ _C.TEST.BATCH_SIZE_PER_GPU = 32
 _C.TEST.FLIP_TEST = False
 _C.TEST.POST_PROCESS = False
 _C.TEST.BLUR_KERNEL = 11
+_C.TEST.SHIFT_HEATMAP = False
 
 _C.TEST.USE_GT_BBOX = False
 

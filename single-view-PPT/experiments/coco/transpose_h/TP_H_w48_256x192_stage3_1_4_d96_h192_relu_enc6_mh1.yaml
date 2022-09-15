@@ -1,4 +1,3 @@
-# 5.65 gflops
 AUTO_RESUME: true
 CUDNN:
   BENCHMARK: true
@@ -7,8 +6,8 @@ CUDNN:
 DATA_DIR: ''
 GPUS: (0,1,2,3)
 OUTPUT_DIR: 'output'
-LOG_DIR: '_log'
-WORKERS: 24
+LOG_DIR: 'log'
+WORKERS: 32
 PRINT_FREQ: 100
 
 DATASET:
@@ -17,27 +16,26 @@ DATASET:
   DATA_FORMAT: jpg
   FLIP: true
   NUM_JOINTS_HALF_BODY: 8
-  PROB_HALF_BODY: 0.3
+  PROB_HALF_BODY: 0.3 
   ROOT: 'data/coco/'
   ROT_FACTOR: 45
   SCALE_FACTOR: 0.35
   TEST_SET: 'val2017'
   TRAIN_SET: 'train2017'
 MODEL:
+  # Transformer Encoder
+  DIM_MODEL: 96
+  DIM_FEEDFORWARD: 192
+  N_HEAD: 1
+  ENCODER_LAYERS: 6
+  ATTENTION_ACTIVATION: relu
+  POS_EMBEDDING: sine
+  # #
   INIT_WEIGHTS: true
-  NAME: pose_tokenpose_b
+  NAME: transpose_h
   NUM_JOINTS: 17
-  PRETRAINED: 'models/pytorch/imagenet/hrnet_w32-36af842e.pth'
+  PRETRAINED: 'models/pytorch/imagenet/hrnet_w48-8ef0771d.pth'
   TARGET_TYPE: gaussian
-  TRANSFORMER_DEPTH: 12
-  TRANSFORMER_HEADS: 8
-  TRANSFORMER_MLP_RATIO: 3
-  POS_EMBEDDING_TYPE: 'sine-full'
-  INIT: true
-  DIM: 192 # 4*4*3
-  PATCH_SIZE:
-  - 3
-  - 4
   IMAGE_SIZE:
   - 192
   - 256
@@ -65,8 +63,8 @@ MODEL:
       - 4
       - 4
       NUM_CHANNELS:
-      - 32
-      - 64
+      - 48
+      - 96
       FUSE_METHOD: SUM
     STAGE3:
       NUM_MODULES: 4
@@ -77,41 +75,46 @@ MODEL:
       - 4
       - 4
       NUM_CHANNELS:
-      - 32
-      - 64
-      - 128
+      - 48
+      - 96
+      - 192
       FUSE_METHOD: SUM
 LOSS:
   USE_TARGET_WEIGHT: true
 TRAIN:
-  BATCH_SIZE_PER_GPU: 32
+  BATCH_SIZE_PER_GPU: 14
   SHUFFLE: true
   BEGIN_EPOCH: 0
-  END_EPOCH: 300
-  OPTIMIZER: adam
-  LR: 0.001
-  LR_FACTOR: 0.1
-  LR_STEP:
+  END_EPOCH: 240
+  LR: 0.0001  # Initial learning rate
+  LR_END: 0.00001  # Final learning rate
+  LR_FACTOR: 0.25  # for MultiStepLR
+  LR_STEP:  # for MultiStepLR
+  - 100
+  - 150
   - 200
-  - 260
-  WD: 0.0001
+  - 220
+  WD: 0.1
   GAMMA1: 0.99
   GAMMA2: 0.0
   MOMENTUM: 0.9
   NESTEROV: false
 TEST:
-  BATCH_SIZE_PER_GPU: 32
+  BLUR_KERNEL: 11
+  BATCH_SIZE_PER_GPU: 12
+  # 'data/coco/person_detection_results/COCO_test-dev2017_detections_AP_H_609_person.json'
+  # 'data/coco/person_detection_results/COCO_val2017_detections_AP_H_56_person.json'
   COCO_BBOX_FILE: 'data/coco/person_detection_results/COCO_val2017_detections_AP_H_56_person.json'
   BBOX_THRE: 1.0
   IMAGE_THRE: 0.0
   IN_VIS_THRE: 0.2
-  MODEL_FILE: '/data/pretrained/pose/tokenpose/tokenpose_b_d12_h8_d192_74_6.pth'
+  MODEL_FILE: models/pytorch/transpose_coco/tp_h_48_256x192_enc6_d96_h192_mh1.pth
   NMS_THRE: 1.0
   OKS_THRE: 0.9
   USE_GT_BBOX: true
   FLIP_TEST: true
   POST_PROCESS: true
-  BLUR_KERNEL: 11
+  SHIFT_HEATMAP: true
 DEBUG:
   DEBUG: true
   SAVE_BATCH_IMAGES_GT: true

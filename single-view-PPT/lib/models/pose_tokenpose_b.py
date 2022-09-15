@@ -47,7 +47,12 @@ class TokenPose_B(nn.Module):
                                  pos_embedding_type=cfg.MODEL.POS_EMBEDDING_TYPE)
         ###################################################3
 
-    def forward(self, x, ratio=0.7):
+        self.ratio = cfg.MODEL.PRUNING_RATIO  # 
+
+    def forward(self, x, ratio=None):
+        if ratio is None:
+            ratio = self.ratio
+
         x = self.pre_feature(x)
         x = self.transformer(x, ratio=ratio)
         return x

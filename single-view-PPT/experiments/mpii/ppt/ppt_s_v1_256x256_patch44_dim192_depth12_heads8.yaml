@@ -23,6 +23,8 @@ DATASET:
   TEST_SET: valid
   TRAIN_SET: train
 MODEL:
+  PRUNING: true  # PPT only
+  PRUNING_RATIO: 0.7  # PPT only
   INIT_WEIGHTS: true
   NAME: pose_tokenpose_s
   NUM_JOINTS: 16

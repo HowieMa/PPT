@@ -1,0 +1,1 @@
+ln -s /COCO_ROOT/coco .

@@ -4,6 +4,7 @@
 # Licensed under the MIT License.
 # Written by Bin Xiao (Bin.Xiao@microsoft.com)
 # Modified by Hanbin Dai (daihanbin.ac@gmail.com) and Feng Zhang (zhangfengwcy@gmail.com)
+# Modified by Haoyu Ma (haoyum3@uci.edu)
 # ------------------------------------------------------------------------------
 
 from __future__ import absolute_import
@@ -28,9 +29,9 @@ from utils.vis import save_debug_images
 logger = logging.getLogger(__name__)
 
 
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 WARM_UP_EPOCH = 10
 TOTAL_DECAY_EPOCH = 100
-PRUNE_RATE = 0.8
 
 def adjust_keep_rate(iters, epoch, warmup_epochs, total_epochs, 
                     iter_per_epoch, base_keep_rate=0.7, max_keep_rate=1):
@@ -39,13 +40,12 @@ def adjust_keep_rate(iters, epoch, warmup_epochs, total_epochs,
         return 1
     if epoch >= total_epochs:
         return base_keep_rate
-    
     total_decay_iters = iter_per_epoch * (total_epochs - warmup_epochs)
     iters = iters - iter_per_epoch * warmup_epochs
     keep_rate = base_keep_rate + (max_keep_rate - base_keep_rate) \
         * (math.cos(iters / total_decay_iters * math.pi) + 1) * 0.5
-
     return keep_rate
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 def train(config, train_loader, model, criterion, optimizer, epoch,
@@ -66,13 +66,18 @@ def train(config, train_loader, model, criterion, optimizer, epoch,
         # measure data loading time
         data_time.update(time.time() - end)
 
-        # >>>>>>>>>>>>>>>>>>>>>>>>>>>> model forward >>>>>>>>>>>>>>>>>>>>>>>>>>>>
         # compute output
-        ratio = adjust_keep_rate(cur_iter + i, epoch, warmup_epochs=WARM_UP_EPOCH, 
-                                total_epochs=WARM_UP_EPOCH + TOTAL_DECAY_EPOCH,
-                                iter_per_epoch=len(train_loader), base_keep_rate=PRUNE_RATE)
-
-        outputs = model(input, ratio)
+        # outputs = model(input)
+        # >>>>>>>>>>>>>>>>>>>>>>>>>>>> model forward >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        if config.MODEL.PRUNING:
+            ratio = adjust_keep_rate(cur_iter + i, epoch, warmup_epochs=WARM_UP_EPOCH, 
+                                    total_epochs=WARM_UP_EPOCH + TOTAL_DECAY_EPOCH,
+                                    iter_per_epoch=len(train_loader), 
+                                    base_keep_rate=config.MODEL.PRUNING_RATIO)
+            outputs = model(input, ratio)
+        else:
+            outputs = model(input)
+        # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         target = target.cuda(non_blocking=True)
         target_weight = target_weight.cuda(non_blocking=True)
@@ -109,7 +114,8 @@ def train(config, train_loader, model, criterion, optimizer, epoch,
                   'Speed {speed:.1f} samples/s\t' \
                   'Data {data_time.val:.3f}s ({data_time.avg:.3f}s)\t' \
                   'Loss {loss.val:.5f} ({loss.avg:.5f})\t' \
-                  'Accuracy {acc.val:.3f} ({acc.avg:.3f}) \tRatio {ratio:.3f}'.format(
+                  'Accuracy {acc.val:.3f} ({acc.avg:.3f}) \t' \
+                  'Keep Ratio {ratio:.3f}'.format(
                       epoch, i, len(train_loader), batch_time=batch_time,
                       speed=input.size(0)/batch_time.val,
                       data_time=data_time, loss=losses, acc=acc, ratio=ratio)
@@ -149,7 +155,14 @@ def validate(config, val_loader, val_dataset, model, criterion, output_dir,
         end = time.time()
         for i, (input, target, target_weight, meta) in enumerate(val_loader):
             # compute output
-            outputs = model(input, ratio=PRUNE_RATE)
+            # outputs = model(input)
+            # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            if config.MODEL.PRUNING:
+                outputs = model(input, ratio=config.MODEL.PRUNING_RATIO)
+            else:
+                outputs = model(input)
+            # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            
             if isinstance(outputs, list):
                 output = outputs[-1]
             else:
@@ -160,7 +173,13 @@ def validate(config, val_loader, val_dataset, model, criterion, output_dir,
                 # input_flipped = model(input[:, :, :, ::-1])
                 input_flipped = np.flip(input.cpu().numpy(), 3).copy()
                 input_flipped = torch.from_numpy(input_flipped).cuda()
-                outputs_flipped = model(input_flipped)
+
+                # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                if config.MODEL.PRUNING:
+                    outputs_flipped = model(input_flipped, ratio=config.MODEL.PRUNING_RATIO)
+                else:
+                    outputs_flipped = model(input_flipped)
+                # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
                 if isinstance(outputs_flipped, list):
                     output_flipped = outputs_flipped[-1]
