@@ -207,8 +207,6 @@ class Transformer(nn.Module):
         return x
 
 
-
-
 class TransformerMulti(nn.Module):
     def __init__(self, dim, depth, heads, mlp_dim, dropout,num_keypoints=None,all_attn=False, scale_with_head=False, pruning_loc=[3,6,9]):
         super().__init__()

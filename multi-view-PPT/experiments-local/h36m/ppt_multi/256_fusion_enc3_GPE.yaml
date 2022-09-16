@@ -1,5 +1,5 @@
 GPUS: '0,1,2,3'
-MODEL: multiview_transpose
+MODEL: multiview_ppt
 DATA_DIR: ''
 OUTPUT_DIR: 'output'
 LOG_DIR: 'log'
@@ -9,7 +9,7 @@ PRINT_FREQ: 100
 DATASET:
   TRAIN_DATASET: multiview_h36m
   TEST_DATASET: multiview_h36m
-  ROOT: '/media/hdd10tb/haoyum/human36m/'
+  ROOT: 'data/h36m/'
   TRAIN_SUBSET: train
   TEST_SUBSET: validation
   DATA_FORMAT: 'jpg'

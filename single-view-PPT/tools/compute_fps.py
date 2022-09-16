@@ -30,7 +30,7 @@ random.seed(seed)
 device = torch.device('cuda:0')
 
 
-batch_size = 64
+batch_size = 32
 
 
 def parse_args():

@@ -45,13 +45,26 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python tools/test.py --cfg experiments/coco/tokenpo
 
 
 ### ThroughPut calculation ###
-# TokenPose-S
-python tools/compute_fps.py --cfg experiments/coco/tokenpose/tokenpose_s_v1_256_192_patch43_dim192_depth12_heads8.yaml
 # PPT-S
 python tools/compute_fps.py --cfg experiments/coco/ppt/ppt_s_v1_256_192_patch43_dim192_depth12_heads8.yaml
+# PPT-B
+python tools/compute_fps.py --cfg experiments/coco/ppt/ppt_b_256_192_patch43_dim192_depth12_heads8.yaml
+# PPT-L/D6
+python tools/compute_fps.py --cfg experiments/coco/ppt/ppt_L_D6_256_192_patch43_dim192_depth6_heads8.yaml
+
+## For a fair comparison of FPS / ThroughPut, we suggest you run the following scripts on the same machine. 
+# TokenPose-S
+python tools/compute_fps.py --cfg experiments/coco/tokenpose/tokenpose_s_v1_256_192_patch43_dim192_depth12_heads8.yaml
+# TokenPose-B
+python tools/compute_fps.py --cfg experiments/coco/tokenpose/tokenpose_b_256_192_patch43_dim192_depth12_heads8.yaml
+# TokenPose-L/D6
+python tools/compute_fps.py --cfg experiments/coco/tokenpose/tokenpose_L_D6_256_192_patch43_dim192_depth12_heads8.yaml
 
 # HR-Net-W32
 python tools/compute_fps.py --cfg experiments/coco/hrnet/w32_256x192_adam_lr1e-3.yaml
+# HR-Net-W48
+python tools/compute_fps.py --cfg experiments/coco/hrnet/w48_256x192_adam_lr1e-3.yaml
+
 # TransPose-R-A3
 python tools/compute_fps.py --cfg experiments/coco/transpose_r/TP_R_256x192_d256_h1024_enc3_mh8.yaml
 # TransPose-H-A6

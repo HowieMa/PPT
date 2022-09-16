@@ -16,8 +16,8 @@ In ECCV 2022
 
 
 ## Running
-To run PPT of single-view 2D pose estimation, please see [this](https://github.com/HowieMa/PPT/tree/main/single-view-PPT). 
-To run PPT of multi-view 3D pose estimation, please see [this](https://github.com/HowieMa/PPT/tree/main/multi-view-PPT).
+For monocular 2D pose estimation, please see [single-view-PPT](https://github.com/HowieMa/PPT/tree/main/single-view-PPT).     
+For multi-view 3D pose estimation, please see [multi-view-PPT](https://github.com/HowieMa/PPT/tree/main/multi-view-PPT).   
 
 
 

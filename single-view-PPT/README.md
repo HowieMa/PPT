@@ -15,10 +15,10 @@ cd single-view-PPT/
 pip install -r requirements.txt
 ~~~
 
-3. Download pretrained models from our model zoo: [Google Drive](https://drive.google.com/drive/folders/1GEzXEmwZKX7g6u55n7r-x3e7lCvrLzV6?usp=sharing). 
-we also include the pre-trained HRNet, TransPose, and TokenPose (rerun by us) into the same folder to simplify the downloading. 
-**All copyright belongs to their respective owners!**. You can also download them from their original source separately:    
-[HRNet model zoo](https://drive.google.com/drive/folders/1hOTihvbyIxsm5ygDpbUuJ7O_tzv4oXjC)   
+3. Download pretrained models from our model zoo: ([Google Drive](https://drive.google.com/drive/folders/1GEzXEmwZKX7g6u55n7r-x3e7lCvrLzV6?usp=sharing)). 
+We also put the pre-trained HRNet, TransPose, and TokenPose (rerun by us) into the same folder to simplify the downloading. 
+**All copyright belongs to their respective owners!** You can also download them from their original source separately:    
+[HRNet model zoo](https://github.com/leoxiaobin/deep-high-resolution-net.pytorch)   
 [TransPose model zoo](https://github.com/yangsenius/TransPose)   
 
 Please put them under `${POSE_ROOT}/single-view-PPT/models`, and make them look like this:
@@ -57,10 +57,10 @@ ${POSE_ROOT}/single-view-PPT/data/coco/
 ~~~
 
 ### Training & Testing
-
+We take PPT-S as an example:  
 1. Testing on COCO val2017 dataset
 ~~~
-CUDA_VISIBLE_DEVICES=0,1,2,3 python tools/test.py --cfg experiments/coco/ppt/ppt_s_v1_256_192_patch43_dim192_depth12_heads8.yaml TEST.MODEL_FILE models/pytorch/pose_coco/ppt_s_256x192_ratio07.pth TEST.USE_GT_BBOX False
+python tools/test.py --cfg experiments/coco/ppt/ppt_s_v1_256_192_patch43_dim192_depth12_heads8.yaml TEST.MODEL_FILE models/pytorch/pose_coco/ppt_s_256x192_ratio07.pth TEST.USE_GT_BBOX False
 ~~~
 This script should create folders `{POSE_ROOT}/single-view-PPT/output/coco/pose_tokenpose_s/ppt_s_v1_256_192_patch43_dim192_depth12_heads8/`   
 The result should be 
@@ -77,13 +77,13 @@ The result should be
 python tools/compute_fps.py --cfg experiments/coco/ppt/ppt_s_v1_256_192_patch43_dim192_depth12_heads8.yaml
 ~~~ 
 On a single 2080Ti, the FPS should be `130` and the throughput should be `870` images/s
-Note that, the results may be slightly different
+Note that, the results may be slightly different due to randomness. 
 
 
 3. Training on COCO train2017 dataset
 ~~~
-CUDA_VISIBLE_DEVICES=0,1,2,3 python tools/train.py --cfg experiments/coco/ppt/ppt_s_v1_256_192_patch43_dim192_depth12_heads8.yaml
+python tools/train.py --cfg experiments/coco/ppt/ppt_s_v1_256_192_patch43_dim192_depth12_heads8.yaml
 ~~~
 
 
-For all scripts, please refer to [scripts.sh](https://github.com/HowieMa/PPT/tree/main/single-view-PPT/scripts.sh)
+For all training / testing scripts, please see [scripts.sh](https://github.com/HowieMa/PPT/tree/main/single-view-PPT/scripts.sh)
