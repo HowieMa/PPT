@@ -58,7 +58,7 @@ python tools/compute_fps.py --cfg experiments/coco/tokenpose/tokenpose_s_v1_256_
 # TokenPose-B
 python tools/compute_fps.py --cfg experiments/coco/tokenpose/tokenpose_b_256_192_patch43_dim192_depth12_heads8.yaml
 # TokenPose-L/D6
-python tools/compute_fps.py --cfg experiments/coco/tokenpose/tokenpose_L_D6_256_192_patch43_dim192_depth12_heads8.yaml
+python tools/compute_fps.py --cfg experiments/coco/tokenpose/tokenpose_L_D6_256_192_patch43_dim192_depth6_heads8.yaml
 
 # HR-Net-W32
 python tools/compute_fps.py --cfg experiments/coco/hrnet/w32_256x192_adam_lr1e-3.yaml
@@ -67,5 +67,9 @@ python tools/compute_fps.py --cfg experiments/coco/hrnet/w48_256x192_adam_lr1e-3
 
 # TransPose-R-A3
 python tools/compute_fps.py --cfg experiments/coco/transpose_r/TP_R_256x192_d256_h1024_enc3_mh8.yaml
+# TransPose-R-A4
+python tools/compute_fps.py --cfg experiments/coco/transpose_r/TP_R_256x192_d256_h1024_enc4_mh8.yaml
+# TransPose-H-S
+python tools/compute_fps.py --cfg experiments/coco/transpose_h/TP_H_w32_256x192_stage3_1_4_d64_h128_relu_enc4_mh1.yaml
 # TransPose-H-A6
 python tools/compute_fps.py --cfg experiments/coco/transpose_h/TP_H_w48_256x192_stage3_1_4_d96_h192_relu_enc6_mh1.yaml
