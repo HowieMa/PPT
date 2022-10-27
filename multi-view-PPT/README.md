@@ -74,3 +74,9 @@ python run/pose2d/valid.py --cfg experiments-local/h36m/ppt_multi/256_fusion_enc
 # Evaluation (3D)
 python run/pose3d/estimate_tri.py --cfg experiments-local/h36m/ppt_multi/256_fusion_enc3_GPE.yaml
 ~~~
+
+Our trained model can be found at this [link](https://drive.google.com/drive/folders/1y7ANiDeiIIC2hzrVVndTgYMLDD6Os1HG)
+
+
+
+
