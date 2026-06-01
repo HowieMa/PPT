@@ -15,7 +15,7 @@ cd single-view-PPT/
 pip install -r requirements.txt
 ~~~
 
-3. Download pretrained models from our model zoo: ([Google Drive](https://drive.google.com/drive/folders/1GEzXEmwZKX7g6u55n7r-x3e7lCvrLzV6?usp=sharing)). 
+3. Download pretrained models from our model zoo: ([Google Drive](https://drive.google.com/drive/folders/18_BF38z39WbiY87lRzTFooeXEpoyRIKW?usp=drive_link)). 
 We also put the pre-trained HRNet, TransPose, and TokenPose (rerun by us) into the same folder to simplify the downloading. 
 **All copyright belongs to their respective owners!** You can also download them from their original source separately:    
 [HRNet model zoo](https://github.com/leoxiaobin/deep-high-resolution-net.pytorch)   
