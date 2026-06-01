@@ -14,7 +14,7 @@ git clone https://github.com/HowieMa/TransFusion-Pose.git
 pip install -r requirements.txt
 ~~~
 
-3. Download pre-trained PPT-S on 256x256 resolution ([Google Drive](https://drive.google.com/file/d/17Lpo8F3wiTTvxhXRIlzVx1_3_GSBKsRa/view?usp=sharing)). 
+3. Download pre-trained PPT-S on 256x256 resolution ([Google Drive](https://drive.google.com/file/d/1elExiWEre9hVgPkWlRbF-uFybeaYbVQb/view?usp=sharing)). 
 Note: 
 This model is different from the PPT-S trained on COCO.   
 Due to the positional encoding and path projection layer of TokenPose, it is difficult to transfer model trained on one resolution to the other. 
@@ -75,7 +75,7 @@ python run/pose2d/valid.py --cfg experiments-local/h36m/ppt_multi/256_fusion_enc
 python run/pose3d/estimate_tri.py --cfg experiments-local/h36m/ppt_multi/256_fusion_enc3_GPE.yaml
 ~~~
 
-Our trained model can be found at this [link](https://drive.google.com/drive/folders/1y7ANiDeiIIC2hzrVVndTgYMLDD6Os1HG)
+Our trained model can be found at this [link](https://drive.google.com/drive/folders/15QA9kgTiFnCwbYUGLYjEwOVu5Oya3wMS?usp=drive_link)
 
 
 
