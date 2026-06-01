@@ -23,7 +23,7 @@ Meanwhile, the order and definition of keypoints between COCO and Human 3.6M are
 
 Please put them under `${POSE_ROOT}/multi-view-PPT/models`, and make them look like this:
 ~~~
-${POSE_ROOT}/single-view-PPT/models
+${POSE_ROOT}/multi-view-PPT/models
     └── ppt_s_ratio_07_coco_256_256.pth
 ~~~
 
